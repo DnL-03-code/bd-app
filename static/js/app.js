@@ -1,8 +1,14 @@
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/service-worker.js")
-    .then(() => console.log("Service Worker zarejestrowany"));
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then((registration) => {
+        console.log("Service Worker zarejestrowany:", registration.scope);
+      })
+      .catch((error) => {
+        console.error("Błąd rejestracji Service Workera:", error);
+      });
+  });
 }
-
 const stage = document.getElementById('stage');
 const openBtn = document.getElementById('openBtn');
 const closeBtn = document.getElementById('closeBtn');

@@ -344,7 +344,7 @@ button:active {
   padding: 0;
   max-width: none;
   background: red; 
-  /* display: none; */
+  display: none;
   border: none;
   border-radius: 8px;
   z-index: 30;
