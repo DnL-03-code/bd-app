@@ -10,6 +10,174 @@
   <title>Mapa Huncwotów</title>
 
   <link rel="stylesheet" href="./static/css/style.css">
+
+  <style>
+    .quote-wrap {
+      position: absolute;
+      left: 50%;
+      top: 32.5%;
+      transform: translate(-50%, -50%) scale(.94);
+      z-index: 1;
+      width: min(84vw, 500px);
+      text-align: center;
+      opacity: .16;
+      pointer-events: none;
+      transition:
+        opacity 500ms ease,
+        transform 500ms ease,
+        filter 500ms ease;
+      filter: blur(10px);
+    }
+
+    .timer-wrap {
+      top: 58%;
+    }
+
+    .quote-box {
+      position: relative;
+      min-height: 175px;
+      padding: 30px 26px 26px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.32), transparent 34%),
+        linear-gradient(180deg, rgba(248,236,211,.86), rgba(224,197,154,.72));
+      border: 1px solid rgba(92, 54, 31, .28);
+      box-shadow:
+        0 16px 34px rgba(0,0,0,.16),
+        inset 0 1px 0 rgba(255,255,255,.42),
+        inset 0 -18px 30px rgba(82,45,24,.08);
+      backdrop-filter: blur(3px);
+      color: #3f2516;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    .quote-box::before {
+      content: "“";
+      position: absolute;
+      top: -34px;
+      left: 18px;
+      font-size: 7rem;
+      line-height: 1;
+      color: rgba(90, 52, 31, .13);
+      font-family: Georgia, "Times New Roman", serif;
+      pointer-events: none;
+    }
+
+    .quote-box::after {
+      content: "";
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 18px;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(92,54,31,.28),
+        transparent
+      );
+      pointer-events: none;
+    }
+
+    .quote-text {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      max-width: 36ch;
+      font-size: clamp(1.02rem, 3.1vw, 1.42rem);
+      line-height: 1.48;
+      font-style: italic;
+      text-wrap: balance;
+      text-shadow: 0 1px 0 rgba(255,255,255,.25);
+    }
+
+    .quote-author {
+      position: relative;
+      z-index: 1;
+      display: block;
+      align-self: flex-end;
+      margin-right: 10px;
+      font-size: .88rem;
+      color: #6b4330;
+      letter-spacing: .03em;
+      font-style: italic;
+      opacity: .9;
+    }
+
+    .quote-changing {
+      animation: quoteFade 280ms ease;
+    }
+
+    .stage.open .quote-wrap {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      filter: blur(0);
+    }
+
+    .stage.open .quote-box {
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.38), transparent 34%),
+        linear-gradient(180deg, rgba(248,236,211,.92), rgba(224,197,154,.82));
+      border: 1px solid rgba(92,54,31,.34);
+      box-shadow:
+        0 16px 34px rgba(0,0,0,.18),
+        inset 0 1px 0 rgba(255,255,255,.48),
+        inset 0 -18px 30px rgba(82,45,24,.08);
+    }
+
+    @keyframes quoteFade {
+      0% {
+        opacity: .45;
+        transform: translateY(4px);
+        filter: blur(2px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .quote-wrap {
+        top: 29.5%;
+        width: min(86vw, 430px);
+      }
+
+      .timer-wrap {
+        top: 59%;
+      }
+
+      .quote-box {
+        min-height: 190px;
+        padding: 28px 20px 24px;
+        border-radius: 22px;
+      }
+
+      .quote-box::before {
+        top: -26px;
+        left: 14px;
+        font-size: 6rem;
+      }
+
+      .quote-text {
+        max-width: 30ch;
+        font-size: clamp(.98rem, 3.8vw, 1.2rem);
+        line-height: 1.5;
+      }
+
+      .quote-author {
+        margin-right: 4px;
+        font-size: .82rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -18,6 +186,18 @@
       <div class="under-map"></div>
       <div class="glow"></div>
       <div class="sparkle"></div>
+
+      <div class="quote-wrap" id="quoteWrap">
+        <div class="quote-box">
+          <p class="quote-text" id="quoteText">
+            „Uroczyście oznajmiam, że knuję coś niedobrego.”
+          </p>
+
+          <span class="quote-author" id="quoteAuthor">
+            ~Mapa Huncwotów
+          </span>
+        </div>
+      </div>
 
       <div class="timer-wrap" id="timerWrap">
         <div class="timer-box">
@@ -83,5 +263,106 @@
 
   <script src="./static/js/czary.js"></script>
   <script src="./static/js/app.js"></script>
+
+  <script>
+    const quotesByDay = {
+      14: {
+        text: "Strach przed imieniem zwiększa strach przed tym kto je nosi. ;)",
+        author: "~Albus Dumbledore"
+      },
+
+
+      13: {
+        text: "Ci których kochamy nigdy nas nie opuszczają. Zawsze można ich znaleźć w sercu.",
+        author: "~Syriusz Blask"
+      },
+
+
+      12: {
+        text: "cytat 12",
+        author: "~podpis12"
+      },
+
+      11: {
+        text: "cytat 11",
+        author: "~podpis11"
+      }
+
+      // Dopisujesz kolejne tak:
+      // 10: {
+      //   text: "cytat 10",
+      //   author: "~podpis10"
+      // }
+    };
+
+    const defaultQuote = {
+      text: "Uroczyście oznajmiam, że knuję coś niedobrego.",
+      author: "~Mapa Huncwotów"
+    };
+
+    let currentQuoteDay = null;
+
+    function getTimerDayNumber() {
+      const daysElement = document.getElementById("days");
+
+      if (!daysElement) {
+        return null;
+      }
+
+      const daysText = daysElement.textContent.trim();
+      const daysNumber = Number.parseInt(daysText, 10);
+
+      if (Number.isNaN(daysNumber)) {
+        return null;
+      }
+
+      return daysNumber;
+    }
+
+    function updateQuoteFromTimer() {
+      const quoteText = document.getElementById("quoteText");
+      const quoteAuthor = document.getElementById("quoteAuthor");
+      const quoteBox = document.querySelector(".quote-box");
+
+      if (!quoteText || !quoteAuthor || !quoteBox) {
+        return;
+      }
+
+      const dayNumber = getTimerDayNumber();
+
+      if (dayNumber === currentQuoteDay) {
+        return;
+      }
+
+      currentQuoteDay = dayNumber;
+
+      const quote = quotesByDay[dayNumber] || defaultQuote;
+
+      quoteText.textContent = `„${quote.text}”`;
+      quoteAuthor.textContent = quote.author;
+
+      quoteBox.classList.remove("quote-changing");
+      void quoteBox.offsetWidth;
+      quoteBox.classList.add("quote-changing");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateQuoteFromTimer();
+
+      const daysElement = document.getElementById("days");
+
+      if (daysElement) {
+        const observer = new MutationObserver(() => {
+          updateQuoteFromTimer();
+        });
+
+        observer.observe(daysElement, {
+          childList: true,
+          characterData: true,
+          subtree: true
+        });
+      }
+    });
+  </script>
 </body>
 </html>
