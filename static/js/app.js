@@ -26,7 +26,7 @@ const overlayClose = document.getElementById('overlayClose');
 const gestureCanvas = document.getElementById('gestureCanvas');
 
 const animationDuration = 1800;
-const targetDate = new Date('2026-05-05T00:00:00');
+const targetDate = new Date('2026-05-14T00:00:00');
 
 let timerInterval = null;
 
